@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Salgirah Mubarak — Wish Generator
+
+A commemorative wish card generator for the Salgirah (birthday) of Mawlana Hazir Imam,
+Prince Rahim Aga Khan V, celebrated on 12th October by the Ismaili Jamat.
+
+Visitors enter their name and a personal wish, preview a gold-and-emerald keepsake card,
+download it as a PNG image, and their wish is saved to MongoDB. Admins can sign in to
+`/admin` to view all submitted wishes.
+
+## Tech Stack
+
+- **Next.js 16** (App Router) + **TypeScript**
+- **Tailwind CSS v4** for styling
+- **MongoDB** + **Mongoose** for storage
+- **html-to-image** for client-side PNG export of the wish card
+- Password-protected `/admin` page (HTTP-only signed session cookie)
 
 ## Getting Started
 
-First, run the development server:
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Configure environment variables
+
+Copy `.env.example` to `.env.local` and fill in the values:
+
+```bash
+cp .env.example .env.local
+```
+
+| Variable | Description |
+|---|---|
+| `MONGODB_URI` | Connection string for your MongoDB database (e.g. a free [MongoDB Atlas](https://www.mongodb.com/atlas) cluster) |
+| `ADMIN_PASSWORD` | Password required to sign in to `/admin` |
+| `ADMIN_SESSION_SECRET` | Long random string used to sign the admin session cookie (e.g. `openssl rand -hex 32`) |
+
+### 3. Run the dev server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit [http://localhost:3000](http://localhost:3000) for the public wish form, and
+[http://localhost:3000/admin](http://localhost:3000/admin) for the admin dashboard.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 4. Build for production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm run start
+```
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+  app/
+    page.tsx                 Public wish form + card preview + download
+    admin/page.tsx            Admin login + submitted wishes table
+    api/wishes/route.ts       POST (save wish) / GET (admin-only list)
+    api/admin/login/route.ts  Admin login, sets session cookie
+    api/admin/logout/route.ts Admin logout, clears session cookie
+  components/
+    WishCard.tsx               The downloadable card template
+    ResponsiveCardPreview.tsx  Scales the card to fit any screen for preview
+    WishStudio.tsx             Form state, save + PNG download logic
+  lib/
+    mongodb.ts                 Cached Mongoose connection
+    adminAuth.ts                Session token creation/verification
+  models/Wish.ts               Mongoose schema for saved wishes
+  types/wish.ts                Shared types and field length limits
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deployment
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Recommended: deploy the app to [Vercel](https://vercel.com) and use
+[MongoDB Atlas](https://www.mongodb.com/atlas) for the database. Set the same three
+environment variables (`MONGODB_URI`, `ADMIN_PASSWORD`, `ADMIN_SESSION_SECRET`) in your
+hosting provider's project settings.

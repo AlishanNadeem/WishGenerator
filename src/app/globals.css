@@ -1,26 +1,62 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-emerald-950: #06281d;
+  --color-emerald-900: #0a3327;
+  --color-emerald-800: #0d4332;
+  --color-gold: #d4af5c;
+  --color-gold-soft: #e9d6a4;
+  --color-cream: #f6efe2;
+
+  --background: var(--color-emerald-950);
+  --foreground: var(--color-cream);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  height: 100%;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--color-emerald-950);
+  background-image: radial-gradient(
+      circle at 12% 8%,
+      rgba(212, 175, 92, 0.12),
+      transparent 42%
+    ),
+    radial-gradient(circle at 88% 4%, rgba(212, 175, 92, 0.08), transparent 38%),
+    radial-gradient(circle at 50% 100%, rgba(13, 67, 50, 0.65), transparent 55%),
+    repeating-radial-gradient(
+      circle at 0 0,
+      rgba(212, 175, 92, 0.05) 0,
+      rgba(212, 175, 92, 0.05) 1px,
+      transparent 1px,
+      transparent 34px
+    );
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+}
+
+.wish-card-surface {
+  background-image: radial-gradient(
+      circle at 18% 12%,
+      rgba(212, 175, 92, 0.18),
+      transparent 55%
+    ),
+    radial-gradient(circle at 85% 92%, rgba(212, 175, 92, 0.14), transparent 50%),
+    repeating-linear-gradient(
+      135deg,
+      rgba(212, 175, 92, 0.05) 0px,
+      rgba(212, 175, 92, 0.05) 1px,
+      transparent 1px,
+      transparent 14px
+    ),
+    linear-gradient(160deg, #06281d 0%, #0d4332 55%, #0a3327 100%);
 }
